@@ -7,9 +7,19 @@ import DashboardPatient from "./pages/DashboardPatient";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import RegisterDocter from "./pages/RegisterDocter";
 
+
+
+//import components
+import Navbar from "./components/Navbar";
+
+
+
+
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
+      
       <Routes>
         <Route path="/" element={<Home />} />
 
