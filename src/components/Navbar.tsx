@@ -1,45 +1,86 @@
-import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/authStore.ts";
+import { NavLink } from "react-router-dom";
+import { useThemeStore } from "../store/themeStore";
+import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
 
 export default function Navbar() {
-  const { user } = useAuthStore(); // check auth state
+  const theme = useThemeStore(s => s.theme);
+  const toggleTheme = useThemeStore(s => s.toggleTheme);
+
+  const linkBase = "px-3 py-2 text-sm font-medium transition";
+  const linkActive = "text-blue-600 dark:text-blue-400";
+  const linkInactive = "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100";
 
   return (
-    <nav className="w-full flex items-center justify-between px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <Link to="/" className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
-        Doctor Booking
-      </Link>
+    <header className="
+      sticky top-0 z-50 w-full
+      border-b border-gray-200 dark:border-gray-800
+      bg-white/70 dark:bg-gray-900/90 backdrop-blur-md
+    ">
+      <nav className="max-w-7xl mx-auto h-16 flex items-center justify-between px-6">
+        
+        {/* LEFT */}
+        <div className="flex items-center gap-6">
+          <span className="font-semibold text-xl tracking-tight text-blue-600 dark:text-blue-400">
+            Doctor Booking
+          </span>
 
-      <div className="flex items-center gap-4">
-        {!user && (
-          <>
-            <Link to="/login" className="text-gray-700 dark:text-gray-200 hover:text-indigo-600">
+          {/* Navigation Links */}
+          <div className="hidden md:flex gap-2">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : linkInactive}`
+              }
+            >
+              Home
+            </NavLink>
+
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : linkInactive}`
+              }
+            >
               Login
-            </Link>
-            <Link
+            </NavLink>
+
+            <NavLink
               to="/register-patient"
-              className="text-gray-700 dark:text-gray-200 hover:text-indigo-600"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : linkInactive}`
+              }
             >
               Register Patient
-            </Link>
-            <Link
+            </NavLink>
+
+            <NavLink
               to="/register-doctor"
-              className="text-gray-700 dark:text-gray-200 hover:text-indigo-600"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : linkInactive}`
+              }
             >
               Register Doctor
-            </Link>
-          </>
-        )}
+            </NavLink>
+          </div>
+        </div>
 
-        {user && (
-          <Link
-            to={`/dashboard/${user.role}`}
-            className="text-gray-700 dark:text-gray-200 hover:text-indigo-600"
+        {/* RIGHT */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="
+              w-9 h-9 flex items-center justify-center rounded-lg
+              border border-gray-300 dark:border-gray-700
+              bg-gray-50 dark:bg-gray-800
+              text-gray-700 dark:text-gray-200
+              hover:bg-gray-100 dark:hover:bg-gray-700 transition
+            "
           >
-            Dashboard
-          </Link>
-        )}
-      </div>
-    </nav>
+            {theme === "light" ? <MoonIcon className="w-5 h-5"/> : <SunIcon className="w-5 h-5"/>}
+          </button>
+        </div>
+
+      </nav>
+    </header>
   );
 }

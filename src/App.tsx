@@ -11,17 +11,33 @@ import RegisterDocter from "./pages/RegisterDocter";
 
 //import components
 import Navbar from "./components/Navbar";
+import { useEffect } from "react";
+import { useThemeStore } from "./store/themeStore";
+import DoctorsList from "./pages/DoctorsList";
+
 
 
 
 
 function App() {
+  
+const theme = useThemeStore(s => s.theme);
+
+useEffect(() => {
+  console.log("theme changed ->", theme);
+}, [theme]);
+
+  document.documentElement.classList.toggle("dark", theme === "dark");
+
+
+
   return (
     <BrowserRouter>
       <Navbar />
-      
+
       <Routes>
         <Route path="/" element={<Home />} />
+        
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
@@ -32,6 +48,9 @@ function App() {
         <Route path="/dashboard/doctor" element={<DashboardDoctor />} />
         <Route path="/dashboard/patient" element={<DashboardPatient />} />
         <Route path="/dashboard/admin" element={<DashboardAdmin />} />
+
+        <Route path="/dashboard/patient/doctors" element={<DoctorsList />} />
+
 
       </Routes>
     </BrowserRouter>

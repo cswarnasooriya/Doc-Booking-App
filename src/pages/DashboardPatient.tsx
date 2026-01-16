@@ -1,11 +1,10 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 
-const DashboardPatient = () => {
+export default function DashboardPatient() {
   return (
     <DashboardLayout>
-      <h1 className="p-4 text-gray-900 dark:text-gray-100">Patient Dashboard</h1>
+      <h1 className="text-2xl font-semibold mb-4">Patient Dashboard</h1>
+      <p>Here you will see doctors, appointments, and booking history.</p>
     </DashboardLayout>
-  )
+  );
 }
-
-export default DashboardPatient

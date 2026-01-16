@@ -3,7 +3,8 @@ import DashboardLayout from "../layouts/DashboardLayout";
 export default function DashboardDoctor() {
   return (
     <DashboardLayout>
-      <h1 className="p-4 text-gray-900 dark:text-gray-100">Doctor Dashboard</h1>
+      <h1 className="text-2xl font-semibold mb-4">Doctor Dashboard</h1>
+      <p>Here you will manage availability and view incoming appointments.</p>
     </DashboardLayout>
   );
 }
