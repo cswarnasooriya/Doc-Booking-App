@@ -1,14 +1,16 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useThemeStore } from "../store/themeStore";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import { useAuthStore } from "../store/authStore";
 
 export default function Navbar() {
-  const theme = useThemeStore(s => s.theme);
-  const toggleTheme = useThemeStore(s => s.toggleTheme);
+  const navigate = useNavigate();
 
-  const linkBase = "px-3 py-2 text-sm font-medium transition";
-  const linkActive = "text-blue-600 dark:text-blue-400";
-  const linkInactive = "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100";
+  const theme = useThemeStore((s) => s.theme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+
+  const logout = useAuthStore((s) => s.logout);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
 
   return (
     <header className="
@@ -17,55 +19,50 @@ export default function Navbar() {
       bg-white/70 dark:bg-gray-900/90 backdrop-blur-md
     ">
       <nav className="max-w-7xl mx-auto h-16 flex items-center justify-between px-6">
-        
-        {/* LEFT */}
-        <div className="flex items-center gap-6">
-          <span className="font-semibold text-xl tracking-tight text-blue-600 dark:text-blue-400">
-            Doctor Booking
-          </span>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex gap-2">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `${linkBase} ${isActive ? linkActive : linkInactive}`
-              }
-            >
-              Home
-            </NavLink>
+        {/* Logo */}
+        <span
+          onClick={() => navigate("/")}
+          className="
+            font-semibold text-xl tracking-tight text-blue-600 dark:text-blue-400
+            cursor-pointer select-none
+          "
+        >
+          Doctor Booking
+        </span>
 
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                `${linkBase} ${isActive ? linkActive : linkInactive}`
-              }
-            >
-              Login
-            </NavLink>
-
-            <NavLink
-              to="/register-patient"
-              className={({ isActive }) =>
-                `${linkBase} ${isActive ? linkActive : linkInactive}`
-              }
-            >
-              Register Patient
-            </NavLink>
-
-            <NavLink
-              to="/register-doctor"
-              className={({ isActive }) =>
-                `${linkBase} ${isActive ? linkActive : linkInactive}`
-              }
-            >
-              Register Doctor
-            </NavLink>
-          </div>
-        </div>
-
-        {/* RIGHT */}
+        {/* Right Actions */}
         <div className="flex items-center gap-3">
+
+          {!isLoggedIn && (
+            <>
+              <button
+                onClick={() => navigate("/register-patient")}
+                className="
+                  text-sm px-3 py-1.5 rounded-md font-medium
+                  border border-gray-300 dark:border-gray-700
+                  text-gray-700 dark:text-gray-200
+                  hover:bg-gray-100 dark:hover:bg-gray-800 transition
+                "
+              >
+                Register Patient
+              </button>
+
+              <button
+                onClick={() => navigate("/register-doctor")}
+                className="
+                  text-sm px-3 py-1.5 rounded-md font-medium
+                  border border-gray-300 dark:border-gray-700
+                  text-gray-700 dark:text-gray-200
+                  hover:bg-gray-100 dark:hover:bg-gray-800 transition
+                "
+              >
+                Register Doctor
+              </button>
+            </>
+          )}
+
+          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             className="
@@ -76,10 +73,39 @@ export default function Navbar() {
               hover:bg-gray-100 dark:hover:bg-gray-700 transition
             "
           >
-            {theme === "light" ? <MoonIcon className="w-5 h-5"/> : <SunIcon className="w-5 h-5"/>}
+            {theme === "light" ? (
+              <MoonIcon className="w-5 h-5" />
+            ) : (
+              <SunIcon className="w-5 h-5" />
+            )}
           </button>
-        </div>
 
+          {/* Login / Logout */}
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+              className="
+                px-4 py-1.5 text-sm font-medium rounded-md
+                bg-red-600 hover:bg-red-700 text-white shadow transition
+              "
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="
+                px-4 py-1.5 text-sm font-medium rounded-md
+                bg-blue-600 hover:bg-blue-700 text-white shadow transition
+              "
+            >
+              Login
+            </button>
+          )}
+        </div>
       </nav>
     </header>
   );

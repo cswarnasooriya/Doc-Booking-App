@@ -1,10 +1,20 @@
 import { useState } from "react";
+import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("patient");
+  const login = useAuthStore(s => s.login);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
+    login(role); // save fake login state
+    if (role === "patient") navigate("/dashboard/patient");
+    if (role === "doctor") navigate("/dashboard/doctor");
+    if (role === "admin") navigate("/dashboard/admin");
+
     e.preventDefault();
     console.log("Login payload:", { email, password });
     // later: call backend
@@ -13,7 +23,7 @@ export default function Login() {
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-white dark:bg-gray-900 p-6">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 rounded-xl shadow-sm space-y-6">
-        
+
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
             Login
@@ -22,7 +32,7 @@ export default function Login() {
             Sign in using your email and password.
           </p>
         </div>
-        
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-1">
             <label className="text-sm text-gray-700 dark:text-gray-300">Email</label>

@@ -1,16 +1,17 @@
 import { create } from "zustand";
 
-type UserRole = "doctor" | "patient" | "admin";
-
 interface AuthState {
-  user: null | { role: UserRole; name: string };
-  login: (role: UserRole) => void;
+  role: string | null;
+  isLoggedIn: boolean;
+  login: (role: string) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  login: (role) => set({ user: { role, name: "Kamal Silva" } }),
-  logout: () => set({ user: null }),
+  role: null,
+  isLoggedIn: false,
+
+  login: (role) => set({ role, isLoggedIn: true }),
+
+  logout: () => set({ role: null, isLoggedIn: false }),
 }));
- 

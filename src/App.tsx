@@ -14,18 +14,22 @@ import Navbar from "./components/Navbar";
 import { useEffect } from "react";
 import { useThemeStore } from "./store/themeStore";
 import DoctorsList from "./pages/DoctorsList";
+import DoctorAvailability from "./pages/DoctorAvailability";
+import PatientHistory from "./pages/PatientHistory";
+import AdminModeration from "./pages/AdminModeration";
+import DoctorAppointments from "./pages/DoctorAppointments";
 
 
 
 
 
 function App() {
-  
-const theme = useThemeStore(s => s.theme);
 
-useEffect(() => {
-  console.log("theme changed ->", theme);
-}, [theme]);
+  const theme = useThemeStore(s => s.theme);
+
+  useEffect(() => {
+    console.log("theme changed ->", theme);
+  }, [theme]);
 
   document.documentElement.classList.toggle("dark", theme === "dark");
 
@@ -37,7 +41,7 @@ useEffect(() => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        
+
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
@@ -50,6 +54,11 @@ useEffect(() => {
         <Route path="/dashboard/admin" element={<DashboardAdmin />} />
 
         <Route path="/dashboard/patient/doctors" element={<DoctorsList />} />
+        <Route path="/dashboard/doctor/availability" element={<DoctorAvailability />} />
+        <Route path="/dashboard/patient/history" element={<PatientHistory />} />
+        <Route path="/dashboard/admin/moderation" element={<AdminModeration />} />
+        <Route path="/dashboard/doctor/appointments" element={<DoctorAppointments />} />
+
 
 
       </Routes>
