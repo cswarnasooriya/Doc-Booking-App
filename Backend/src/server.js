@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+
 
 dotenv.config();
 
@@ -16,6 +18,10 @@ app.use(cors({
 }));
 
 connectDB();
+
+
+
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => res.send("API Running"));
 
