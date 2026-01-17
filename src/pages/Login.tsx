@@ -1,24 +1,45 @@
 import { useState } from "react";
-import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import api from "../lib/api";
+import { useAuthStore } from "../store/authStore";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const loginStore = useAuthStore();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("patient");
-  const login = useAuthStore(s => s.login);
-  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    login(role); // save fake login state
-    if (role === "patient") navigate("/dashboard/patient");
-    if (role === "doctor") navigate("/dashboard/doctor");
-    if (role === "admin") navigate("/dashboard/admin");
-
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login payload:", { email, password });
-    // later: call backend
+
+    try {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      // Save token + role in Zustand state
+      loginStore.login(res.data.accessToken, res.data.role);
+
+      // Role-based routing
+      switch (res.data.role) {
+        case "patient":
+          navigate("/dashboard/patient");
+          break;
+        case "doctor":
+          navigate("/dashboard/doctor");
+          break;
+        case "admin":
+          navigate("/dashboard/admin");
+          break;
+      }
+    } catch (err: any) {
+      const msg = err?.response?.data?.error || "Login failed";
+      alert(msg);
+    }
   };
+
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-white dark:bg-gray-900 p-6">

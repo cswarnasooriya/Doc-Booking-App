@@ -4,7 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-
+import { seedAdmin } from "./config/seedAdmin.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 
@@ -17,11 +18,16 @@ app.use(cors({
   credentials: true,
 }));
 
-connectDB();
 
+
+
+
+connectDB().then(seedAdmin);
 
 
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
+
 
 app.get("/", (req, res) => res.send("API Running"));
 
