@@ -18,14 +18,22 @@ export const patientRegister = async (req, res) => {
   }
 };
 
+
 export const doctorRegister = async (req, res) => {
   try {
     const user = await registerDoctor(req.body);
-    res.json({ message: "Doctor registered; awaiting approval", role: user.role });
+
+    res.json({
+      message: "Doctor registered; awaiting admin approval",
+      role: user.role,
+      status: user.doctor.status,
+    });
+
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
+
 
 export const login = async (req, res) => {
   try {

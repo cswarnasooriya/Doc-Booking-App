@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 
-export const registerPatient = async ({ name, email, password }) => {
+export const registerPatient = async ({ name, email, password, phone, gender }) => {
   const existing = await User.findOne({ email });
   if (existing) throw new Error("Email already registered");
 
@@ -10,6 +10,8 @@ export const registerPatient = async ({ name, email, password }) => {
   const user = await User.create({
     name,
     email,
+    phone,
+    gender,
     passwordHash: hash,
     role: "patient",
   });
@@ -17,7 +19,9 @@ export const registerPatient = async ({ name, email, password }) => {
   return user;
 };
 
-export const registerDoctor = async ({ name, email, password, specialization, experience }) => {
+
+
+export const registerDoctor = async ({ name, gender, phone, email, password, specialization, experience }) => {
   const existing = await User.findOne({ email });
   if (existing) throw new Error("Email already registered");
 
@@ -25,18 +29,21 @@ export const registerDoctor = async ({ name, email, password, specialization, ex
 
   const user = await User.create({
     name,
+    gender,
+    phone,
     email,
     passwordHash: hash,
     role: "doctor",
     doctor: {
       specialization,
       experience,
-      status: "pending", // !!! KEY
+      status: "pending", // moderation pipeline
     },
   });
 
   return user;
 };
+
 
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
