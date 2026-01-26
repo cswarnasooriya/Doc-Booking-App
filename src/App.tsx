@@ -8,7 +8,6 @@ import DashboardAdmin from "./pages/DashboardAdmin";
 import RegisterDocter from "./pages/RegisterDocter";
 
 
-
 //import components
 import Navbar from "./components/Navbar";
 import { useEffect } from "react";
@@ -18,7 +17,7 @@ import DoctorAvailability from "./pages/DoctorAvailability";
 import PatientHistory from "./pages/PatientHistory";
 import AdminModeration from "./pages/AdminModeration";
 import DoctorAppointments from "./pages/DoctorAppointments";
-
+import { useAuthStore } from "./store/authStore";
 
 
 
@@ -32,6 +31,13 @@ function App() {
   }, [theme]);
 
   document.documentElement.classList.toggle("dark", theme === "dark");
+
+  const auth = useAuthStore();
+
+  useEffect(() => {
+    auth.rehydrate();
+  }, []);
+
 
 
 

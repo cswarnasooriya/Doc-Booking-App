@@ -41,7 +41,9 @@ export const login = async (req, res) => {
 
     // doctor can't login until approved
     if (user.role === "doctor" && user.doctor.status !== "active") {
-      return res.status(403).json({ error: "Doctor not approved yet" });
+      return res.status(403).json({
+        error: `Doctor account ${user.doctor.status}, awaiting admin action`
+      });
     }
 
     const accessToken = generateAccessToken(user._id, user.role);

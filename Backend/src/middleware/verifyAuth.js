@@ -1,15 +1,19 @@
 import jwt from "jsonwebtoken";
 
 export default function verifyAuth(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: "Unauthorized" });
-
-  const token = authHeader.split(" ")[1];
   try {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      return res.status(401).json({ error: "Unauthorized to access" });
+    }
+
+    const token = auth.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // attaches { userId, role }
+
+    req.user = decoded;
     next();
-  } catch {
-    res.status(401).json({ error: "Invalid token" });
+  } catch (err) {
+    console.error("Auth Error:", err.message);
+    return res.status(401).json({ error: "Invalid token" });
   }
 }
